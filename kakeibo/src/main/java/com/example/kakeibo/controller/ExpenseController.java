@@ -1,9 +1,12 @@
 package com.example.kakeibo.controller;
 
 import com.example.kakeibo.domain.Expense;
+import com.example.kakeibo.dto.ExpenseRequest;
+import com.example.kakeibo.dto.ExpenseResponse;
 import com.example.kakeibo.service.ExpenseService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -18,26 +21,47 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public List<Expense> getAll() {
-        return service.findAll();
+    public List<ExpenseResponse> getAll() {
+        return service.findAll()
+                .stream()
+                .map(ExpenseResponse::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Expense getById(@PathVariable Integer id) {
-        return service.findById(id);
+    public ExpenseResponse getById(@PathVariable Integer id) {
+        return new ExpenseResponse(service.findById(id));
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Expense create(@Valid @RequestBody Expense expense) {
-        return service.create(expense);
+    public ExpenseResponse create(@Valid @RequestBody ExpenseRequest request) {
+        Expense expense = new Expense();
+        expense.setDate(request.getDate());
+        expense.setCategory(request.getCategory());
+        expense.setAmount(request.getAmount());
+        expense.setMemo(request.getMemo());
+
+        Expense saved = service.create(expense);
+
+        return new ExpenseResponse(saved);
     }
 
     @PutMapping("/{id}")
-    public Expense update(@PathVariable Integer id,
-                          @Valid @RequestBody Expense newData) {
-        return service.update(id, newData);
+    public ExpenseResponse update(@PathVariable Integer id,
+                          @Valid @RequestBody ExpenseRequest request) {
+        Expense expense = new Expense();
+        expense.setDate(request.getDate());
+        expense.setCategory(request.getCategory());
+        expense.setAmount(request.getAmount());
+        expense.setMemo(request.getMemo());
+
+        Expense updated = service.update(id, expense);
+
+        return new ExpenseResponse(updated);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         service.delete(id);

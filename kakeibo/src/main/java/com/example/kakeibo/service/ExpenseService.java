@@ -2,12 +2,14 @@ package com.example.kakeibo.service;
 
 import com.example.kakeibo.domain.Expense;
 import com.example.kakeibo.repository.ExpenseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Transactional
 @Service
 public class ExpenseService {
 
@@ -43,6 +45,7 @@ public class ExpenseService {
     }
 
     public void delete(Integer id) {
-        repository.deleteById(id);
+        Expense existing = findById(id);
+        repository.delete(existing);
     }
 }
