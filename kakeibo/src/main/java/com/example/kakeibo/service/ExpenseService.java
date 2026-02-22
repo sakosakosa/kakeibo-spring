@@ -26,7 +26,10 @@ public class ExpenseService {
     public Expense findById(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Expense not found"
+                        ));
     }
 
     public Expense create(Expense expense) {
