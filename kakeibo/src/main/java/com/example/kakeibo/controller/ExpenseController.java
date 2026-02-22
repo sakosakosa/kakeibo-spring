@@ -7,8 +7,9 @@ import com.example.kakeibo.service.ExpenseService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/expenses")
@@ -21,11 +22,10 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public List<ExpenseResponse> getAll() {
-        return service.findAll()
-                .stream()
-                .map(ExpenseResponse::new)
-                .toList();
+    public Page<ExpenseResponse> getAll(Pageable pageable) {
+        return service.findAll(pageable)
+                .map(ExpenseResponse::new);
+
     }
 
     @GetMapping("/{id}")

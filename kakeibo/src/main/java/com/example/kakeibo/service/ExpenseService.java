@@ -2,7 +2,9 @@ package com.example.kakeibo.service;
 
 import com.example.kakeibo.domain.Expense;
 import com.example.kakeibo.repository.ExpenseRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,8 +21,8 @@ public class ExpenseService {
         this.repository = repository;
     }
 
-    public List<Expense> findAll() {
-        return repository.findAll();
+    public Page<Expense> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Expense findById(Integer id) {
