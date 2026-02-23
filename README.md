@@ -40,4 +40,4 @@ mvn spring-boot:run
 ## データベース
 
 SQLiteを使用しています。
-DBファイルは data/expenses.db に作成されます。
+DBファイルは data/expenses.db に作成されます。 
